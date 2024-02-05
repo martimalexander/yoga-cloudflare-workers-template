@@ -1,0 +1,17 @@
+name: Deploy Worker
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build & Deploy Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: "NagF7S6c-uQKGBnEIITKS2o-ngYBh847EydfHCd2"
+          accountId: "48bf49cad2e848477372ed9ffd1a69cb"
+          
