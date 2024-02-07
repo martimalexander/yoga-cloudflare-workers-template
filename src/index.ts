@@ -51,5 +51,4 @@ hono.post('/login', async (request, response) => {
     .send('Invalid username or password');
 });
 
-// Start the Hono server
-hono.start();
+export default hono;
