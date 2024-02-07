@@ -1,67 +1,55 @@
-import { createYoga, createSchema } from "graphql-yoga";
+import { Hono, ResponseBuilder } from 'hono';
 
-const schema = createSchema({
-  typeDefs: /* GraphQL */ `
-    type PokemonSprites {
-      front_default: String!
-      front_shiny: String!
-      front_female: String!
-      front_shiny_female: String!
-      back_default: String!
-      back_shiny: String!
-      back_female: String!
-      back_shiny_female: String!
-    }
-    type Pokemon {
-      id: ID!
-      name: String!
-      height: Int!
-      weight: Int!
-      sprites: PokemonSprites!
-    }
-    type Query {
-      pokemon(id: ID!): Pokemon
-    }
-  `,
-  resolvers: {
-    Query: {
-      pokemon: async (_parent, { id }) => {
-        const result = await fetch(
-          new Request(`https://pokeapi.co/api/v2/pokemon/${id}`),
-          {
-            // @ts-expect-error
-            cf: {
-              // Always cache this fetch regardless of content type
-              // for a max of 1 min before revalidating the resource
-              cacheTtl: 50,
-              cacheEverything: true,
-            },
-          }
-        );
-        return await result.json();
-      },
-    },
-  },
+// Define your login credentials
+const validUsername = 'admin';
+const validPassword = 'password123';
+
+// Create a new Hono instance
+const hono = new Hono();
+
+// Define route for login endpoint
+hono.get('/', (_, response) => {
+  const html = `
+    <html>
+    <head>
+      <title>Login Page</title>
+    </head>
+    <body>
+      <h1>Login</h1>
+      <form action="/login" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="Login">
+      </form>
+    </body>
+    </html>
+  `;
+
+  return response
+    .status(200)
+    .contentType('text/html')
+    .send(html);
 });
 
-const yoga = createYoga({
-  schema,
-  graphiql: {
-    defaultQuery: /* GraphQL */ `
-      query samplePokeAPIquery {
-        pokemon: pokemon(id: 1) {
-          id
-          name
-          height
-          weight
-          sprites {
-            front_shiny
-            back_shiny
-          }
-        }
-      }
-    `,
-  },
+// Define route for login submission
+hono.post('/login', async (request, response) => {
+  const { username, password } = await request.formData();
+
+  // Check if the provided username and password match the valid credentials
+  if (username === validUsername && password === validPassword) {
+    return response
+      .status(200)
+      .contentType('text/plain')
+      .send('Login successful!');
+  }
+
+  return response
+    .status(401)
+    .contentType('text/plain')
+    .send('Invalid username or password');
 });
 
-self.addEventListener("fetch", yoga);
+// Start the Hono server
+hono.start();
