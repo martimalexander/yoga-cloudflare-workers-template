@@ -9,4 +9,4 @@ app.get('/', (c) => {
 })
 
 // Export the Hono instance as the default app
-export default hono;
+export default app;
