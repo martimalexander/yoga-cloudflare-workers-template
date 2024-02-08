@@ -9,7 +9,7 @@ app.get('/', (c) => {
 })
 
 app.get('ip',(c) => {
-  const response = fetch("https://ipinfo.io/1.1.1.1/json");
+  const response = await fetch("https://ipinfo.io/1.1.1.1/json");
   return response.json
 })
 
