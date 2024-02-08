@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: dhej
-        run: npm i
+        run: npm i axios hono 
       - name: Build & Deploy Worker
         uses: cloudflare/wrangler-action@v3
         with:
