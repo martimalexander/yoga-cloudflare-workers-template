@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: dhej
-        run: npm install hono
+        run: npm i
       - name: Build & Deploy Worker
         uses: cloudflare/wrangler-action@v3
         with:
