@@ -9,8 +9,8 @@ app.get('/', (c) => {
 })
 
 app.get('ip',(c) => {
-  const response = axios.get("https://ipinfo.io/1.1.1.1/json");
-  return response
+  const response = fetch("https://ipinfo.io/1.1.1.1/json");
+  return response.json
 })
 
 // Export the Hono instance as the default app
