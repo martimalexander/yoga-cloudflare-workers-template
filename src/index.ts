@@ -6,25 +6,27 @@ const app = new Hono();
 // Define route for root endpoint
 app.get('/', (c) => {
   return c.text("Hey server is running");
-});
+  });
 
-// Get IP information using fetch
-app.get('ip', async (c) => {
-  try {
-    const response = await fetch("https://ipinfo.io/1.1.1.1/json");
+  // Get IP information using fetch
+  app.get('/ip/:anyip', async (c, { params }) => {
+    const userIp = params.anyip; // Get the user-provided IP from the URL path
 
-    if (!response.ok) {
-      throw new Error(`Error fetching IP: ${response.statusText}`);
-    }
+      try {
+          const response = await fetch(`https://ipinfo.io/${userIp}/json`);
 
-    const data = await response.json();
-    return c.text(JSON.stringify(data)); // Return JSON data as text
+              if (!response.ok) {
+                    throw new Error(`Error fetching IP: ${response.statusText}`);
+                        }
 
-  } catch (error) {
-    console.error('Error fetching IP:', error);
-    return c.text('Failed to get IP information');
-  }
-});
+                            const data = await response.json();
+                                return c.json(data); // Return JSON data as a JSON object
+                                  } catch (error) {
+                                      console.error('Error fetching IP:', error);
+                                          return c.text('Failed to get IP information');
+                                            }
+                                            });
 
-// Export the Hono instance as the default app
-export default app;
+                                            // Export the Hono instance as the default app
+                                            export default app;
+                                            
