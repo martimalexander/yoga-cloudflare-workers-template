@@ -1,16 +1,16 @@
-import { Hono } from 'hono';
+import { Hono, Context, Response } from 'hono';
 
 // Create a new Hono instance
 const app = new Hono();
 
 // Define route for root endpoint
-app.get('/', (c) => {
+app.get('/', (c: Context): Response => {
   return c.text("Hey server is running");
 });
 
 // Get IP information using fetch
-app.get('/ip/:anyip', async (c, { params }) => {
-  const userIp = params.anyip; // Get the user-provided IP from the URL path
+app.get('/ip/:anyip', async (c: Context, { params }: { params: { anyip: string } }): Promise<Response> => {
+  const userIp: string = params.anyip; // Get the user-provided IP from the URL path
 
   try {
     const response = await fetch(`https://ipinfo.io/${userIp}/json`);
