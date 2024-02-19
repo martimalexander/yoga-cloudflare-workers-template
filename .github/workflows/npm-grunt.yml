@@ -2,10 +2,6 @@ name: Nuclie Reconnaissance
 
 on:
   workflow_dispatch:
-    inputs:
-      target_url:
-        description: 'URL to perform reconnaissance on'
-        required: true
 
 jobs:
   reconnaissance:
@@ -18,12 +14,10 @@ jobs:
 
     - name: Install Nuclie
       run: |
-        wget https://github.com/projectdiscovery/nuclei/releases/download/v2.7.4/nuclei_2.7.4_linux_amd64.tar.gz
-        tar xvzf nuclei_2.7.4_linux_amd64.tar.gz
-        sudo mv nuclei /usr/local/bin/
-
-    - name: Perform reconnaissance
-      run: nuclei -u ${{ github.event.inputs.target_url }} -t ~/nuclei-templates
+        git clone https://github.com/Escartem/InfiniteCraftSearch
+        cd InfiniteCraftSearch
+        pip3 install requests
+        python3 infinite_craft.py
 
     - name: Display output
-      run: cat ~/nuclei-templates/results/*.txt
+      run: cat craft_result.json
